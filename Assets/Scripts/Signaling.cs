@@ -19,13 +19,17 @@ public class Signaling : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        _audioSource.Play();
-        StartCoroutine(VolumeChange(_maximumVolume));
+        if (other.gameObject.TryGetComponent(out ThiefMovement thiefMovement))
+        {
+            _audioSource.Play();
+            StartCoroutine(VolumeChange(_maximumVolume));
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        StartCoroutine(VolumeChange(0f));
+        if (other.gameObject.TryGetComponent(out ThiefMovement thiefMovement))
+            StartCoroutine(VolumeChange(0f));
     }
 
     private IEnumerator VolumeChange(float targetVolume)
