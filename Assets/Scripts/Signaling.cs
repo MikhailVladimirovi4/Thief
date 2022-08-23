@@ -8,13 +8,13 @@ public class Signaling : MonoBehaviour
     [SerializeField] private float _recoveryRate;
 
     private AudioSource _audioSource;
-    private float _maximumVolume;
+    private readonly float _maximumVolume = 1f;
+    private readonly float _minimumVolume = 0f;
 
     private void Start()
     {
         _audioSource = GetComponent<AudioSource>();
-        _audioSource.volume = 0;
-        _maximumVolume = 1;
+        _audioSource.volume = _minimumVolume;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -29,7 +29,7 @@ public class Signaling : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.gameObject.TryGetComponent(out ThiefMovement thiefMovement))
-            StartCoroutine(VolumeChange(0f));
+            StartCoroutine(VolumeChange(_minimumVolume));
     }
 
     private IEnumerator VolumeChange(float targetVolume)
@@ -41,7 +41,7 @@ public class Signaling : MonoBehaviour
             yield return null;
         }
 
-        if (_audioSource.volume == 0)
+        if (_audioSource.volume == _minimumVolume)
             _audioSource.Stop();
     }
 }
